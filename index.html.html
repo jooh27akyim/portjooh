@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOOH | Creative Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons for modern aesthetic -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#090a0f',
+                        darkCard: '#11131e',
+                        darkBorder: '#1e2235',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom animations & variables for the dynamic theme engine */
+        :root {
+            --accent: #92ec48; /* Cyberpunk Pink Default */
+            --accent-glow: rgba(22, 206, 175, 0.4);
+            --accent-gradient: linear-gradient(135deg, #14e9b4 0%, #8b5cf6 100%);
+            --accent-secondary: #69e715;
+        }
+
+        body {
+            background-color: #05060a;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Glowing text & border effects mapping to variable colors */
+        .text-glow {
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+        .border-glow {
+            box-shadow: 0 0 20px var(--accent-glow);
+            border-color: var(--accent);
+        }
+        .bg-glow {
+            background: var(--accent-gradient);
+        }
+        .accent-color {
+            color: var(--accent);
+        }
+        .accent-border {
+            border-color: var(--accent);
+        }
+
+        /* Seamless custom styling for custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* Interactive floating blobs styling */
+        .ambient-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            transition: all 0.8s ease-in-out;
+        }
+
+        /* Custom animation for code block mockups */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 10%, rgba(255,255,255,0) 20%);
+            animation: scanline 6s linear infinite;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative">
+
+    <!-- Ambient glowing backgrounds that follow or decorate sections -->
+    <div class="ambient-glow top-20 left-10" id="glow-1"></div>
+    <div class="ambient-glow top-[40%] right-10" id="glow-2"></div>
+    <div class="ambient-glow bottom-20 left-1/3" id="glow-3"></div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#05060a]/80 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <span class="font-display font-bold text-3xl tracking-wider text-white">JO<span class="accent-color text-glow transition-all duration-300" id="brand-accent">OH</span></span>
+                <span class="w-2 h-2 rounded-full bg-glow animate-pulse" id="brand-dot"></span>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#about" class="text-sm font-medium hover:text-white text-gray-400 transition-colors">About</a>
+                <a href="#specialties" class="text-sm font-medium hover:text-white text-gray-400 transition-colors">Specialties</a>
+                <a href="#interactive-hub" class="text-sm font-medium hover:text-white text-gray-400 transition-colors">Creative Hub</a>
+                <a href="#projects" class="text-sm font-medium hover:text-white text-gray-400 transition-colors">Projects</a>
+                <a href="#contact" class="text-sm font-medium hover:text-white text-gray-400 transition-colors">Contact</a>
+            </nav>
+
+            <!-- Theme Toggle & Action Button -->
+            <div class="flex items-center gap-4">
+                <!-- Theme Controller Toggle Button -->
+                <button onclick="toggleThemePanel()" class="p-2.5 rounded-full bg-darkCard border border-white/10 hover:border-white/20 text-gray-300 hover:text-white transition-all relative group" title="Customize Accent Colors">
+                    <i class="fa-solid var(--theme-icon, fa-palette) text-lg animate-spin-slow"></i>
+                    <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-darkBg"></span>
+                </button>
+                <a href="#contact" class="hidden sm:inline-flex bg-glow text-white px-5 py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity shadow-lg" style="box-shadow: 0 4px 14px var(--accent-glow)" id="cta-btn">
+                    Let's Build <i class="fa-solid fa-arrow-right ml-2 self-center text-xs"></i>
+                </a>
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-full bg-darkCard border border-white/10 text-gray-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-bars text-lg" id="mobile-menu-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#05060a]/95 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center px-8">
+        <nav class="flex flex-col gap-8 text-2xl font-display font-semibold mb-12">
+            <a onclick="toggleMobileMenu()" href="#about" class="hover:accent-color transition-colors"><i class="fa-regular fa-user mr-4 text-xl"></i> About</a>
+            <a onclick="toggleMobileMenu()" href="#specialties" class="hover:accent-color transition-colors"><i class="fa-regular fa-compass mr-4 text-xl"></i> Specialties</a>
+            <a onclick="toggleMobileMenu()" href="#interactive-hub" class="hover:accent-color transition-colors"><i class="fa-solid fa-cubes mr-4 text-xl"></i> Creative Hub</a>
+            <a onclick="toggleMobileMenu()" href="#projects" class="hover:accent-color transition-colors"><i class="fa-regular fa-folder-open mr-4 text-xl"></i> Projects</a>
+            <a onclick="toggleMobileMenu()" href="#contact" class="hover:accent-color transition-colors"><i class="fa-regular fa-envelope mr-4 text-xl"></i> Contact</a>
+        </nav>
+        <div class="flex flex-col gap-4">
+            <span class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Ready & Eager to serve you</span>
+            <div class="flex gap-4">
+                <a href="mailto:njuejoakim@gmail.com" class="p-3 bg-darkCard border border-white/5 rounded-full hover:border-white/20 transition-all text-gray-400 hover:text-white"><i class="fa-regular fa-envelope text-xl"></i></a>
+                <a href="https://wa.me/254768427204" target="_blank" class="p-3 bg-darkCard border border-white/5 rounded-full hover:border-white/20 transition-all text-gray-400 hover:text-white"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+                <a href="https://www.tiktok.com/@jooh_25flow" target="_blank" class="p-3 bg-darkCard border border-white/5 rounded-full hover:border-white/20 transition-all text-gray-400 hover:text-white"><i class="fa-brands fa-tiktok text-xl"></i></a>
+                <a href="https://facebook.com/Jooh.Akyim" target="_blank" class="p-3 bg-darkCard border border-white/5 rounded-full hover:border-white/20 transition-all text-gray-400 hover:text-white"><i class="fa-brands fa-facebook text-xl"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Palette / Color Control Panel -->
+    <div id="theme-panel" class="fixed right-6 top-24 z-50 bg-darkCard/95 border border-white/10 p-6 rounded-2xl w-80 shadow-2xl backdrop-blur-xl transform translate-x-[360px] transition-all duration-500">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="font-display font-bold text-lg text-white flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles accent-color" id="panel-magic-icon"></i>
+                Palette Selector
+            </h4>
+            <button onclick="toggleThemePanel()" class="text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">Select an attractive theme to customize the look of the portfolio instantly!</p>
+        
+        <div class="grid grid-cols-1 gap-2.5">
+            <!-- Palette Option: Cyberpunk Pink -->
+            <button onclick="changeTheme('#ec4899', '#8b5cf6', 'rgba(236,72,153,0.4)', 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)', 'Cyberpunk')" class="flex items-center gap-3 w-full p-2.5 bg-darkBg border border-white/5 hover:border-white/20 rounded-xl transition-all text-left">
+                <span class="w-6 h-6 rounded-full flex-shrink-0" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)"></span>
+                <div class="flex-grow">
+                    <div class="text-sm font-semibold text-white">Neon Cyberpunk</div>
+                    <div class="text-[10px] text-gray-500">Hot Pink & Violet</div>
+                </div>
+                <span class="active-check accent-color text-xs"><i class="fa-solid fa-circle-check"></i></span>
+            </button>
+
+            <!-- Palette Option: Sunset Flare -->
+            <button onclick="changeTheme('#f97316', '#ef4444', 'rgba(249,115,22,0.4)', 'linear-gradient(135deg, #f97316 0%, #ef4444 100%)', 'Sunset')" class="flex items-center gap-3 w-full p-2.5 bg-darkBg border border-white/5 hover:border-white/20 rounded-xl transition-all text-left">
+                <span class="w-6 h-6 rounded-full flex-shrink-0" style="background: linear-gradient(135deg, #f97316 0%, #ef4444 100%)"></span>
+                <div class="flex-grow">
+                    <div class="text-sm font-semibold text-white font-display">Sunset Flare</div>
+                    <div class="text-[10px] text-gray-500">Fiery Orange & Crimson</div>
+                </div>
+                <span class="active-check hidden accent-color text-xs"><i class="fa-solid fa-circle-check"></i></span>
+            </button>
+
+            <!-- Palette Option: Electric Lime -->
+            <button onclick="changeTheme('#10b981', '#06b6d4', 'rgba(16,185,129,0.4)', 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)', 'Mint')" class="flex items-center gap-3 w-full p-2.5 bg-darkBg border border-white/5 hover:border-white/20 rounded-xl transition-all text-left">
+                <span class="w-6 h-6 rounded-full flex-shrink-0" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%)"></span>
+                <div class="flex-grow">
+                    <div class="text-sm font-semibold text-white">Emerald Matrix</div>
+                    <div class="text-[10px] text-gray-500">Electric Lime & Cyan</div>
+                </div>
+                <span class="active-check hidden accent-color text-xs"><i class="fa-solid fa-circle-check"></i></span>
+            </button>
+
+            <!-- Palette Option: Oceanic Aurora -->
+            <button onclick="changeTheme('#00f2fe', '#4facfe', 'rgba(0,242,254,0.4)', 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)', 'Aurora')" class="flex items-center gap-3 w-full p-2.5 bg-darkBg border border-white/5 hover:border-white/20 rounded-xl transition-all text-left">
+                <span class="w-6 h-6 rounded-full flex-shrink-0" style="background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)"></span>
+                <div class="flex-grow">
+                    <div class="text-sm font-semibold text-white">Oceanic Aurora</div>
+                    <div class="text-[10px] text-gray-500">Cyan Blue & Aqua Deep</div>
+                </div>
+                <span class="active-check hidden accent-color text-xs"><i class="fa-solid fa-circle-check"></i></span>
+            </button>
+
+            <!-- Palette Option: Amber Gold -->
+            <button onclick="changeTheme('#f59e0b', '#d97706', 'rgba(245,158,11,0.4)', 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', 'Gold')" class="flex items-center gap-3 w-full p-2.5 bg-darkBg border border-white/5 hover:border-white/20 rounded-xl transition-all text-left">
+                <span class="w-6 h-6 rounded-full flex-shrink-0" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"></span>
+                <div class="flex-grow">
+                    <div class="text-sm font-semibold text-white font-display">Amber Sovereign</div>
+                    <div class="text-[10px] text-gray-500">Radiant Gold & Amber</div>
+                </div>
+                <span class="active-check hidden accent-color text-xs"><i class="fa-solid fa-circle-check"></i></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center pt-28 pb-16 px-6 relative z-10" id="hero">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+            
+            <!-- Hero Left: Info & Headline -->
+            <div class="lg:col-span-7 flex flex-col justify-center">
+                <!-- Slogan Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 w-fit mb-6 animate-pulse">
+                    <span class="w-2.5 h-2.5 rounded-full bg-glow" id="badge-glow-dot"></span>
+                    <span class="text-xs font-semibold tracking-wider text-gray-200 uppercase font-display" id="slogan-badge-text">
+                        Ready & Eager to serve you
+                    </span>
+                </div>
+
+                <!-- Main Dynamic Headline -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-display font-bold tracking-tight text-white mb-6 leading-[1.1]">
+                    Hello, I'm <br class="hidden sm:inline">
+                    <span class="bg-glow bg-clip-text text-transparent inline-block tracking-wide hover:scale-105 transition-transform duration-300" id="hero-name-glow">
+                        Joakim Muchira
+                    </span>
+                </h1>
+
+                <!-- Typewriter Specialties Block -->
+                <h2 class="text-xl sm:text-2xl text-gray-300 font-medium mb-6 flex items-center gap-2 h-10">
+                    <span class="accent-color" id="typewriter-prefix">&lt;</span>
+                    <span id="typewriter-text" class="font-mono text-glow"></span>
+                    <span class="w-[3px] h-6 bg-white animate-pulse" id="typewriter-cursor"></span>
+                </h2>
+
+                <p class="text-gray-400 text-base sm:text-lg mb-8 max-w-xl leading-relaxed">
+                    Student at <span class="text-white font-semibold">Meru National Polytechnic</span>. Crafting futuristic digital environments by unifying code with custom motion graphics and high-fidelity video creations.
+                </p>
+
+                <!-- CTA buttons -->
+                <div class="flex flex-wrap gap-4 items-center">
+                    <a href="#contact" class="px-8 py-4 bg-glow rounded-full text-white font-semibold flex items-center gap-3 transition-transform hover:-translate-y-1 shadow-lg shadow-black" style="box-shadow: 0 10px 25px var(--accent-glow)" id="hero-cta-main">
+                        Hire Me Now <i class="fa-solid fa-rocket text-sm"></i>
+                    </a>
+                    <a href="#projects" class="px-8 py-4 bg-darkCard hover:bg-darkCard/80 border border-white/10 hover:border-white/20 rounded-full text-white font-semibold flex items-center gap-2 transition-all">
+                        View Showcase <i class="fa-solid fa-folder-open text-gray-400 text-sm"></i>
+                    </a>
+                </div>
+
+                <!-- Stats Footer row -->
+                <div class="grid grid-cols-3 gap-6 pt-12 mt-12 border-t border-white/5 max-w-lg">
+                    <div>
+                        <div class="text-3xl font-display font-bold text-white mb-1">03+</div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Skill Domains</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-display font-bold text-white mb-1">100%</div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Dedication</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-display font-bold text-white mb-1">2026</div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider font-mono">Present</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Right: Interactive Seamless Profile Picture Frame -->
+            <div class="lg:col-span-5 flex justify-center lg:justify-end">
+                <div class="relative group w-80 h-96 sm:w-96 sm:h-[480px]">
+                    <!-- Futuristic Background Elements -->
+                    <div class="absolute -inset-1.5 bg-glow rounded-[32px] blur opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" id="hero-img-neon-blur"></div>
+                    
+                    <!-- Main Frame Holder -->
+                    <div class="relative w-full h-full bg-[#05060a] border border-white/10 rounded-[32px] overflow-hidden flex items-center justify-center transition-all duration-500 group-hover:scale-[1.02]">
+                        <!-- Profile Image from request -->
+                        <img src="https://i.postimg.cc/zLWv38yB/profile-jpg.jpg" alt="Njue Joakim Muchira (JOOH)" class="w-full h-full object-cover object-top filter grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://placehold.co/600x800/0f172a/ffffff?text=JOOH'">
+                        
+                        <!-- Overlay Scanlines/HUD elements -->
+                        <div class="absolute inset-0 scanline pointer-events-none"></div>
+                        <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[10px] text-gray-300 uppercase tracking-widest font-mono">
+                            SHORT NAME: JOOH
+                        </div>
+
+                        <!-- Slogan Float Box -->
+                        <div class="absolute bottom-6 left-6 right-6 p-4 bg-darkCard/90 border border-white/10 rounded-2xl backdrop-blur-md">
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-mono block mb-1">CURRENT STATUS</span>
+                            <span class="text-sm font-semibold text-white block">Ready & Eager to serve you</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 relative z-10 border-t border-white/5 bg-darkCard/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Details -->
+                <div>
+                    <h3 class="text-xs font-semibold tracking-widest uppercase accent-color mb-3 font-display" id="about-section-sub">WHO IS JOOH?</h3>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mb-6">Merging Design, Audio & Code Seamlessly</h2>
+                    <p class="text-gray-400 mb-6 leading-relaxed text-lg">
+                        I am <span class="text-white font-medium">Njue Joakim Muchira</span>, widely known as <span class="text-white font-bold accent-color font-display">JOOH</span>. As a technology pioneer currently pursuing advanced tech credentials at <span class="text-white font-medium">Meru National Polytechnic</span>, I focus on constructing clean web templates, visually engaging graphics, and professional motion video deliverables.
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Whether designing standard web platforms with elegant codebases, developing interactive user environments, or crafting responsive marketing visuals, my daily mission matches my core slogan: <span class="italic text-white">"Ready & Eager to serve you."</span>
+                    </p>
+
+                    <!-- Embedded interactive list of values -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 rounded-lg bg-white/5 border border-white/10 accent-color mt-0.5"><i class="fa-solid fa-code"></i></span>
+                            <div>
+                                <h4 class="text-white font-semibold">Web Developer</h4>
+                                <span class="text-xs text-gray-500">React, Tailwind, JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 rounded-lg bg-white/5 border border-white/10 accent-color mt-0.5"><i class="fa-solid fa-bezier-curve"></i></span>
+                            <div>
+                                <h4 class="text-white font-semibold">Graphic Designer</h4>
+                                <span class="text-xs text-gray-500">Vector UI, Identity, Branding</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 rounded-lg bg-white/5 border border-white/10 accent-color mt-0.5"><i class="fa-solid fa-video"></i></span>
+                            <div>
+                                <h4 class="text-white font-semibold">Video Editor</h4>
+                                <span class="text-xs text-gray-500">Montages, Sound Waves, FX</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 rounded-lg bg-white/5 border border-white/10 accent-color mt-0.5"><i class="fa-solid fa-graduation-cap"></i></span>
+                            <div>
+                                <h4 class="text-white font-semibold">Academic Foundation</h4>
+                                <span class="text-xs text-gray-500">Meru National Polytechnic</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Dynamic Skills Canvas and Core Tech Stack visualizer -->
+                <div class="bg-darkCard/80 border border-white/10 p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                    <h3 class="font-display font-bold text-2xl text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-simple accent-color" id="skills-icon"></i>
+                        Core Competencies
+                    </h3>
+
+                    <!-- Interactive Slider Elements -->
+                    <div class="space-y-6">
+                        <!-- Skill 1 -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium text-gray-200">Web Development (HTML/CSS/JS)</span>
+                                <span class="accent-color font-mono font-bold">92%</span>
+                            </div>
+                            <div class="h-2 w-full bg-darkBg rounded-full overflow-hidden p-[1px]">
+                                <div class="h-full bg-glow rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <!-- Skill 2 -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium text-gray-200">Graphic Design & UI Layout</span>
+                                <span class="accent-color font-mono font-bold">88%</span>
+                            </div>
+                            <div class="h-2 w-full bg-darkBg rounded-full overflow-hidden p-[1px]">
+                                <div class="h-full bg-glow rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <!-- Skill 3 -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium text-gray-200">Video Editing & Motion Effects</span>
+                                <span class="accent-color font-mono font-bold">85%</span>
+                            </div>
+                            <div class="h-2 w-full bg-darkBg rounded-full overflow-hidden p-[1px]">
+                                <div class="h-full bg-glow rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <!-- Skill 4 -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium text-gray-200">Sound Wave Synchronization</span>
+                                <span class="accent-color font-mono font-bold">80%</span>
+                            </div>
+                            <div class="h-2 w-full bg-darkBg rounded-full overflow-hidden p-[1px]">
+                                <div class="h-full bg-glow rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Polytechnic Pride Callout -->
+                    <div class="mt-8 p-4 bg-darkBg/60 border border-white/5 rounded-2xl flex items-center gap-4">
+                        <span class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-glow accent-color text-2xl"><i class="fa-solid fa-landmark-flag"></i></span>
+                        <div>
+                            <span class="text-xs text-gray-500 uppercase font-mono tracking-wider">INSTITUTION</span>
+                            <span class="text-sm font-semibold text-white block">Meru National Polytechnic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialized Service Showcase Section -->
+    <section id="specialties" class="py-24 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs font-semibold tracking-widest accent-color uppercase font-display" id="spec-badge">Expertise Domains</span>
+                <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3">What Can I Build For You?</h2>
+                <p class="text-gray-400 mt-4">Three premium domains blended together to produce stunning creative deliverables.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Specialty Card: Web Dev -->
+                <div class="group relative bg-darkCard border border-white/10 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:border-white/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-3xl accent-color mb-8 group-hover:scale-110 transition-transform"><i class="fa-solid fa-terminal"></i></div>
+                        <h3 class="font-display font-bold text-2xl text-white mb-4">Web Development</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Designing modular web systems using HTML5, modern Tailwind CSS variables, and native JavaScript engines. Fully responsive, clean layouts with gorgeous adaptive lighting features.</p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex justify-between items-center text-sm">
+                        <span class="text-gray-500 font-mono">CODE</span>
+                        <a href="#contact" class="accent-color font-semibold inline-flex items-center gap-1 hover:underline">Inquire <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
+                    </div>
+                </div>
+
+                <!-- Specialty Card: Graphic Design -->
+                <div class="group relative bg-darkCard border border-white/10 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:border-white/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-3xl accent-color mb-8 group-hover:scale-110 transition-transform"><i class="fa-solid fa-bezier-curve"></i></div>
+                        <h3 class="font-display font-bold text-2xl text-white mb-4">Graphic Design</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Engineering brand identities, digital marketing layouts, logo concepts, and UI components. Focused on balanced spacing, bold font styles, and attractive, glowing color palettes.</p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex justify-between items-center text-sm">
+                        <span class="text-gray-500 font-mono">VECTOR</span>
+                        <a href="#contact" class="accent-color font-semibold inline-flex items-center gap-1 hover:underline">Inquire <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
+                    </div>
+                </div>
+
+                <!-- Specialty Card: Video Editing -->
+                <div class="group relative bg-darkCard border border-white/10 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:border-white/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-3xl accent-color mb-8 group-hover:scale-110 transition-transform"><i class="fa-solid fa-clapperboard"></i></div>
+                        <h3 class="font-display font-bold text-2xl text-white mb-4">Video Editing</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Splicing high-impact motion videos, overlaying transitions, color-grading footage, and designing custom visualizers. Perfect for social media clips, promotional promos, and cinematic edits.</p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex justify-between items-center text-sm">
+                        <span class="text-gray-500 font-mono">MOTION</span>
+                        <a href="#contact" class="accent-color font-semibold inline-flex items-center gap-1 hover:underline">Inquire <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Multimedia Visualizer (Skill Canvas) -->
+    <section id="interactive-hub" class="py-24 px-6 relative z-10 border-y border-white/5 bg-darkCard/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <!-- Visualizer Left Column -->
+                <div class="lg:col-span-4">
+                    <span class="text-xs font-semibold tracking-widest accent-color uppercase font-display" id="hub-badge">Skill Playground</span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3">Interactive Digital Hub</h2>
+                    <p class="text-gray-400 mt-4 leading-relaxed mb-8">
+                        Experience a real-time particle wave generation engine. Use your mouse pointer or touch-slide to manipulate the particle flow. Change the active palette using the floating controller to see the wave change color dynamically!
+                    </p>
+
+                    <div class="flex flex-col gap-4">
+                        <button onclick="regenerateParticles()" class="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-semibold flex items-center gap-2 w-fit transition-all">
+                            <i class="fa-solid fa-arrows-rotate text-glow accent-color animate-spin-slow"></i>
+                            Regenerate Pattern
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Visualizer Right Column: HTML Canvas -->
+                <div class="lg:col-span-8">
+                    <div class="relative bg-darkCard border border-white/10 rounded-3xl overflow-hidden p-4 group">
+                        <!-- Top HUD Bar -->
+                        <div class="flex justify-between items-center border-b border-white/5 pb-3 mb-4 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> ACTIVE RUNNER</span>
+                            <span id="canvas-status">STATUS: ONLINE</span>
+                        </div>
+
+                        <!-- Canvas Container -->
+                        <div class="w-full h-80 sm:h-96 relative">
+                            <canvas id="creative-canvas" class="w-full h-full block rounded-xl cursor-crosshair bg-black/60"></canvas>
+                        </div>
+
+                        <!-- Bottom Help Overlay -->
+                        <div class="mt-4 flex justify-between items-center text-xs text-gray-500">
+                            <span>Touch / Drag to interact</span>
+                            <span id="active-theme-text" class="accent-color font-mono uppercase">THEME: Cyberpunk</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filterable Project Section -->
+    <section id="projects" class="py-24 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+                <div>
+                    <span class="text-xs font-semibold tracking-widest accent-color uppercase font-display" id="project-section-badge">Craftsmanship Gallery</span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3">Selected Projects</h2>
+                </div>
+
+                <!-- Interactive Filters -->
+                <div class="flex flex-wrap gap-2 mt-6 md:mt-0 bg-darkCard p-1.5 rounded-full border border-white/5 w-fit">
+                    <button onclick="filterProjects('all')" class="project-tab px-5 py-2 rounded-full text-xs font-semibold transition-all bg-glow text-white" data-filter="all">All Work</button>
+                    <button onclick="filterProjects('web')" class="project-tab px-5 py-2 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all" data-filter="web">Websites</button>
+                    <button onclick="filterProjects('graphics')" class="project-tab px-5 py-2 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all" data-filter="graphics">Design</button>
+                    <button onclick="filterProjects('video')" class="project-tab px-5 py-2 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all" data-filter="video">Video FX</button>
+                </div>
+            </div>
+
+            <!-- Project Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-grid">
+                <!-- Project Card 1: Web Dev -->
+                <div class="project-card group relative bg-darkCard border border-white/10 rounded-3xl overflow-hidden transition-all duration-300 hover:border-white/25 flex flex-col justify-between" data-category="web">
+                    <div class="relative h-56 overflow-hidden bg-black flex items-center justify-center">
+                        <!-- Custom designed mockup representations for graphic flair -->
+                        <div class="absolute inset-0 opacity-15 bg-gradient-to-tr from-cyan-500 to-indigo-500"></div>
+                        <div class="text-center p-6 z-10 w-full">
+                            <span class="text-[10px] text-gray-500 font-mono tracking-widest block uppercase mb-1">INTERACTIVE APP</span>
+                            <h4 class="font-display font-bold text-xl text-white mb-2">Meru Poly Portal UI</h4>
+                            <div class="flex gap-2 justify-center mt-3">
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-cyan-400 font-mono">HTML5</span>
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-purple-400 font-mono">Tailwind</span>
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-yellow-400 font-mono">JS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-semibold text-lg text-white mb-2 group-hover:accent-color transition-colors">Responsive Portal Template</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-4">A custom student environment tailored specifically for Meru National Polytechnic with localized schedules and event logs.</p>
+                        <div class="flex justify-between items-center pt-4 border-t border-white/5 text-xs">
+                            <span class="text-gray-500 font-mono uppercase">Web Dev</span>
+                            <a href="#contact" class="accent-color font-semibold inline-flex items-center gap-1 hover:underline">Get Service <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2: Graphics -->
+                <div class="project-card group relative bg-darkCard border border-white/10 rounded-3xl overflow-hidden transition-all duration-300 hover:border-white/25 flex flex-col justify-between" data-category="graphics">
+                    <div class="relative h-56 overflow-hidden bg-black flex items-center justify-center">
+                        <div class="absolute inset-0 opacity-15 bg-gradient-to-tr from-orange-500 to-red-500"></div>
+                        <div class="text-center p-6 z-10 w-full">
+                            <span class="text-[10px] text-gray-500 font-mono tracking-widest block uppercase mb-1">VECTOR DESIGN</span>
+                            <h4 class="font-display font-bold text-xl text-white mb-2">JOOH Flow Identity</h4>
+                            <div class="flex gap-2 justify-center mt-3">
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-pink-400 font-mono">Illustrator</span>
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-indigo-400 font-mono">Figma</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-semibold text-lg text-white mb-2 group-hover:accent-color transition-colors">Visual Brand Concepts</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-4">Creative logo and poster concepts using custom glowing palettes, clean alignments, and modern vector systems.</p>
+                        <div class="flex justify-between items-center pt-4 border-t border-white/5 text-xs">
+                            <span class="text-gray-500 font-mono uppercase">Graphic Design</span>
+                            <a href="#contact" class="accent-color font-semibold inline-flex items-center gap-1 hover:underline">Get Service <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3: Video -->
+                <div class="project-card group relative bg-darkCard border border-white/10 rounded-3xl overflow-hidden transition-all duration-300 hover:border-white/25 flex flex-col justify-between" data-category="video">
+                    <div class="relative h-56 overflow-hidden bg-black flex items-center justify-center">
+                        <div class="absolute inset-0 opacity-15 bg-gradient-to-tr from-green-500 to-emerald-500"></div>
+                        <div class="text-center p-6 z-10 w-full">
+                            <span class="text-[10px] text-gray-500 font-mono tracking-widest block uppercase mb-1">AUDIO MOTION</span>
+                            <h4 class="font-display font-bold text-xl text-white mb-2">TikTok Soundwave FX</h4>
+                            <div class="flex gap-2 justify-center mt-3">
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-emerald-400 font-mono">Premiere</span>
+                                <span class="px-2.5 py-1 bg-white/5 rounded-md text-[10px] text-cyan-400 font-mono">AfterFX</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-semibold text-lg text-white mb-2 group-hover:accent-color transition-colors">Dynamic Video Montages</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-4">Cinematic edits synced perfectly with audio beats, including visual transition arrays and glowing text overlays.</p>
+                        <div class="flex justify-between items-center pt-4 border-t border-white/5 text-xs">
+                            <span class="text-gray-500 font-mono uppercase">Video Editing</span>
+                            <a href="#contact" class="accent-color font-semibold inline-flex items-center gap-1 hover:underline">Get Service <i class="fa-solid fa-chevron-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact section with direct social links + interactive mock form -->
+    <section id="contact" class="py-24 px-6 relative z-10 border-t border-white/5 bg-darkCard/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                
+                <!-- Contact info left -->
+                <div class="lg:col-span-5">
+                    <span class="text-xs font-semibold tracking-widest accent-color uppercase font-display" id="contact-badge-info">Contact Hub</span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-6">Let's Bring Your Creative Concept to Life</h2>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        I am <span class="text-white font-medium">Ready & Eager to serve you</span> on your next digital adventure. Get in touch directly through any of my active channels, or leave a quick message via the interactive form.
+                    </p>
+
+                    <!-- Contact details -->
+                    <div class="space-y-4">
+                        <!-- Email link -->
+                        <a href="mailto:njuejoakim@gmail.com" class="group flex items-center gap-4 p-4 rounded-2xl bg-darkCard border border-white/5 hover:border-white/20 transition-all">
+                            <span class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl accent-color group-hover:scale-110 transition-transform"><i class="fa-regular fa-envelope"></i></span>
+                            <div>
+                                <span class="text-xs text-gray-500 block uppercase font-mono">Email Address</span>
+                                <span class="text-sm font-semibold text-white">njuejoakim@gmail.com</span>
+                            </div>
+                        </a>
+
+                        <!-- Whatsapp link -->
+                        <a href="https://wa.me/254768427204" target="_blank" class="group flex items-center gap-4 p-4 rounded-2xl bg-darkCard border border-white/5 hover:border-white/20 transition-all">
+                            <span class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl accent-color group-hover:scale-110 transition-transform"><i class="fa-brands fa-whatsapp"></i></span>
+                            <div>
+                                <span class="text-xs text-gray-500 block uppercase font-mono">WhatsApp</span>
+                                <span class="text-sm font-semibold text-white">0768427204</span>
+                            </div>
+                        </a>
+
+                        <!-- TikTok link -->
+                        <a href="https://www.tiktok.com/@jooh_25flow" target="_blank" class="group flex items-center gap-4 p-4 rounded-2xl bg-darkCard border border-white/5 hover:border-white/20 transition-all">
+                            <span class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl accent-color group-hover:scale-110 transition-transform"><i class="fa-brands fa-tiktok"></i></span>
+                            <div>
+                                <span class="text-xs text-gray-500 block uppercase font-mono">TikTok</span>
+                                <span class="text-sm font-semibold text-white">@jooh_25flow</span>
+                            </div>
+                        </a>
+
+                        <!-- Facebook link -->
+                        <a href="https://facebook.com/Jooh.Akyim" target="_blank" class="group flex items-center gap-4 p-4 rounded-2xl bg-darkCard border border-white/5 hover:border-white/20 transition-all">
+                            <span class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl accent-color group-hover:scale-110 transition-transform"><i class="fa-brands fa-facebook"></i></span>
+                            <div>
+                                <span class="text-xs text-gray-500 block uppercase font-mono">Facebook</span>
+                                <span class="text-sm font-semibold text-white">Jooh Akyim</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Form container right -->
+                <div class="lg:col-span-7 bg-darkCard border border-white/10 p-8 sm:p-10 rounded-3xl relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                    <h3 class="font-display font-bold text-2xl text-white mb-6">Send A Message</h3>
+                    
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Your Name</label>
+                                <input type="text" id="form-name" required placeholder="John Doe" class="w-full bg-darkBg border border-white/10 focus:border-white/30 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Email / Phone</label>
+                                <input type="text" id="form-contact" required placeholder="example@gmail.com" class="w-full bg-darkBg border border-white/10 focus:border-white/30 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Service Needed</label>
+                            <select id="form-service" class="w-full bg-darkBg border border-white/10 focus:border-white/30 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none transition-all cursor-pointer">
+                                <option value="web" class="bg-darkCard">Web Development & Code</option>
+                                <option value="graphics" class="bg-darkCard">Graphic Design & UI Layout</option>
+                                <option value="video" class="bg-darkCard">Video Editing & Motion FX</option>
+                                <option value="consult" class="bg-darkCard">General Collaboration</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Project Brief</label>
+                            <textarea id="form-message" rows="4" required placeholder="Tell me about your amazing creative idea..." class="w-full bg-darkBg border border-white/10 focus:border-white/30 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-600 focus:outline-none transition-all resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-glow text-white font-semibold rounded-xl transition-all shadow-md inline-flex justify-center items-center gap-2" id="form-submit-btn" style="box-shadow: 0 4px 14px var(--accent-glow)">
+                            Send Direct Proposal <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </form>
+
+                    <!-- Success Alert Message container -->
+                    <div id="form-success-box" class="hidden absolute inset-0 bg-darkCard/95 flex flex-col items-center justify-center p-8 text-center">
+                        <div class="w-20 h-20 rounded-full bg-green-500/10 border border-green-500 flex items-center justify-center text-4xl text-green-500 mb-6 animate-bounce"><i class="fa-solid fa-check-double"></i></div>
+                        <h4 class="font-display font-bold text-2xl text-white mb-2">Proposal Transmitted!</h4>
+                        <p class="text-gray-400 text-sm max-w-sm mb-6">Thank you, <span id="success-user-name" class="text-white font-bold">Client</span>. Your brief has been saved. I am ready & eager to serve you!</p>
+                        <button onclick="resetContactForm()" class="px-6 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-semibold transition-all">Send Another Proposal</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Brand Footer -->
+    <footer class="py-12 border-t border-white/5 px-6 bg-[#030407]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <div class="flex items-center gap-2">
+                <span class="font-display font-bold text-2xl tracking-wider text-white">JO<span class="accent-color" id="footer-accent">OH</span></span>
+                <span class="text-xs text-gray-500 border-l border-white/10 pl-3">Ready & Eager to serve you</span>
+            </div>
+
+            <div class="flex gap-4">
+                <a href="mailto:njuejoakim@gmail.com" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-regular fa-envelope"></i></a>
+                <a href="https://wa.me/254768427204" target="_blank" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="https://www.tiktok.com/@jooh_25flow" target="_blank" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://facebook.com/Jooh.Akyim" target="_blank" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+
+            <span class="text-xs text-gray-600 font-mono">
+                © <span id="footer-year">2026</span> JOOH. Built with high-end code & design.
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // Set dynamic year in footer
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+        // Typewriter Effect Logic for specialties
+        const specialtiesList = [
+            "Web Development Hero",
+            "Graphic Designer",
+            "Motion Video Creator",
+            "Tech Enthusiast"
+        ];
+        let specIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const speed = 100;
+        const delayBetween = 2000;
+
+        function typewriter() {
+            const container = document.getElementById('typewriter-text');
+            const currentString = specialtiesList[specIndex];
+            
+            if (isDeleting) {
+                container.textContent = currentString.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                container.textContent = currentString.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentString.length) {
+                isDeleting = true;
+                setTimeout(typewriter, delayBetween);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                specIndex = (specIndex + 1) % specialtiesList.length;
+                setTimeout(typewriter, 500);
+            } else {
+                setTimeout(typewriter, isDeleting ? 50 : speed);
+            }
+        }
+
+        // Initialize typewriter on load
+        window.addEventListener('DOMContentLoaded', () => {
+            typewriter();
+            initVisualizer();
+        });
+
+        // Theme panel toggle
+        function toggleThemePanel() {
+            const panel = document.getElementById('theme-panel');
+            panel.classList.toggle('translate-x-[360px]');
+        }
+
+        // Mobile menu drawer toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            menu.classList.toggle('translate-x-full');
+            if (menu.classList.contains('translate-x-full')) {
+                icon.className = 'fa-solid fa-bars text-lg';
+            } else {
+                icon.className = 'fa-solid fa-xmark text-lg';
+            }
+        }
+
+        // Dynamic theme variables application
+        function changeTheme(primary, secondary, glow, gradient, themeName) {
+            document.documentElement.style.setProperty('--accent', primary);
+            document.documentElement.style.setProperty('--accent-glow', glow);
+            document.documentElement.style.setProperty('--accent-gradient', gradient);
+            document.documentElement.style.setProperty('--accent-secondary', secondary);
+
+            // Reapply styling modifications to existing page elements
+            document.getElementById('brand-accent').style.color = primary;
+            document.getElementById('footer-accent').style.color = primary;
+            document.getElementById('typewriter-prefix').style.color = primary;
+            document.getElementById('brand-dot').style.background = gradient;
+            document.getElementById('badge-glow-dot').style.background = gradient;
+            document.getElementById('hero-name-glow').style.background = gradient;
+            document.getElementById('hero-name-glow').style.webkitBackgroundClip = 'text';
+            document.getElementById('hero-img-neon-blur').style.background = gradient;
+            document.getElementById('hero-cta-main').style.background = gradient;
+            document.getElementById('hero-cta-main').style.boxShadow = `0 10px 25px ${glow}`;
+            document.getElementById('cta-btn').style.background = gradient;
+            document.getElementById('cta-btn').style.boxShadow = `0 4px 14px ${glow}`;
+            document.getElementById('panel-magic-icon').style.color = primary;
+            document.getElementById('skills-icon').style.color = primary;
+            document.getElementById('spec-badge').style.color = primary;
+            document.getElementById('hub-badge').style.color = primary;
+            document.getElementById('project-section-badge').style.color = primary;
+            document.getElementById('contact-badge-info').style.color = primary;
+            document.getElementById('form-submit-btn').style.background = gradient;
+            document.getElementById('form-submit-btn').style.boxShadow = `0 4px 14px ${glow}`;
+
+            // Update all accent color classes manually across standard sections
+            const icons = document.querySelectorAll('.accent-color');
+            icons.forEach(el => el.style.color = primary);
+
+            const activeChecks = document.querySelectorAll('.active-check');
+            activeChecks.forEach(el => el.classList.add('hidden'));
+
+            // Highlight checked palette in panel
+            event.currentTarget.querySelector('.active-check').classList.remove('hidden');
+
+            // Update custom wave coloring if canvas is initiated
+            if (waveThemeSetter) {
+                waveThemeSetter(primary, secondary);
+            }
+
+            // Update dynamic visualizer indicators
+            document.getElementById('active-theme-text').textContent = `THEME: ${themeName}`;
+        }
+
+        // Portfolio filtering logic
+        function filterProjects(cat) {
+            // Update selected button style
+            const tabs = document.querySelectorAll('.project-tab');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-filter') === cat) {
+                    tab.classList.add('bg-glow', 'text-white');
+                    tab.classList.remove('text-gray-400');
+                    tab.style.background = 'var(--accent-gradient)';
+                } else {
+                    tab.classList.remove('bg-glow', 'text-white');
+                    tab.classList.add('text-gray-400');
+                    tab.style.background = 'none';
+                }
+            });
+
+            // Show or hide matching cards
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Interactive Canvas Visualizer Logic (Fluid Wave / Particle System)
+        let waveThemeSetter = null;
+        let regenerateParticles = null;
+
+        function initVisualizer() {
+            const canvas = document.getElementById('creative-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Adjust canvas parameters dynamically
+            function resizeCanvas() {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            let particles = [];
+            let particleCount = 65;
+            let themePrimary = '#ec4899';
+            let themeSecondary = '#8b5cf6';
+            
+            waveThemeSetter = function(pri, sec) {
+                themePrimary = pri;
+                themeSecondary = sec;
+            }
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 1.5;
+                    this.vy = (Math.random() - 0.5) * 1.5;
+                    this.radius = Math.random() * 3 + 1.5;
+                    this.alpha = Math.random() * 0.5 + 0.3;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Boundaries bounce
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = themePrimary;
+                    ctx.globalAlpha = this.alpha;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = themePrimary;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            // Create collection
+            function populate() {
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            populate();
+
+            regenerateParticles = function() {
+                populate();
+                // Brief HUD status update
+                const status = document.getElementById('canvas-status');
+                status.textContent = 'STATUS: REGENERATED';
+                setTimeout(() => status.textContent = 'STATUS: ONLINE', 1200);
+            }
+
+            // Mouse track
+            let mouse = { x: null, y: null, radius: 100 };
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            canvas.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            // Touch events for responsive mobile gestures
+            canvas.addEventListener('touchmove', (e) => {
+                if(e.touches.length > 0) {
+                    const rect = canvas.getBoundingClientRect();
+                    mouse.x = e.touches[0].clientX - rect.left;
+                    mouse.y = e.touches[0].clientY - rect.top;
+                }
+            });
+            canvas.addEventListener('touchend', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            // Main frame update cycle
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw grid lines
+                ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                ctx.lineWidth = 1;
+                const gridSize = 40;
+                for (let x = 0; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+
+                // Node link lines
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                        if (dist < 80) {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = themeSecondary;
+                            ctx.globalAlpha = (1 - dist/80) * 0.15;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                            ctx.restore();
+                        }
+                    }
+                }
+
+                // Update particles
+                particles.forEach(p => {
+                    p.update();
+                    
+                    // Interaction logic with cursor/pointer
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const distToMouse = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+                        if (distToMouse < mouse.radius) {
+                            const force = (mouse.radius - distToMouse) / mouse.radius;
+                            const angle = Math.atan2(p.y - mouse.y, p.x - mouse.x);
+                            p.x += Math.cos(angle) * force * 4;
+                            p.y += Math.sin(angle) * force * 4;
+                        }
+                    }
+                    p.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Contact proposal processing form submission logic
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const nameVal = document.getElementById('form-name').value;
+            const contactVal = document.getElementById('form-contact').value;
+            const serviceVal = document.getElementById('form-service').value;
+            const messageVal = document.getElementById('form-message').value;
+
+            // Log details inside mock localStorage storage for proof-of-work
+            const proposal = {
+                client: nameVal,
+                contact: contactVal,
+                service: serviceVal,
+                message: messageVal,
+                timestamp: new Date().toLocaleString()
+            };
+
+            const existing = JSON.parse(localStorage.getItem('jooh_proposals') || '[]');
+            existing.push(proposal);
+            localStorage.setItem('jooh_proposals', JSON.stringify(existing));
+
+            // Show customized elegant success panel overlay
+            document.getElementById('success-user-name').textContent = nameVal;
+            const successBox = document.getElementById('form-success-box');
+            successBox.classList.remove('hidden');
+        }
+
+        function resetContactForm() {
+            document.getElementById('contact-form').reset();
+            document.getElementById('form-success-box').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
